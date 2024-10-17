@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hubble-ui-ingress
+  namespace: kube-system
+  annotations:
+    nginx.ingress.kubernetes.io/auth-signin: http://oauth2-proxy.ns2.skt-edp.com/oauth2/start?rd=http%3A%2F%2Fhubble-ui.ns2.skt-edp.com
+    nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.ns2.skt-edp.com/oauth2/auth
+    nginx.ingress.kubernetes.io/proxy-buffer-size: 16k
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "*.ns2.tlake.com"
+      http:
+        paths:
+          - backend:
+              service:
+                name: hubble-ui
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
